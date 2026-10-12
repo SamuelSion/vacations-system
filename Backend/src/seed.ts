@@ -126,16 +126,18 @@ const vacations = [
 
 // Create a demo account, or repair it if it already exists with a password hash
 // that does not match the current HASH_SALT (e.g. HASH_SALT was changed later):
-async function ensureDemoUser(firstName: string, email: string, plainPassword: string, roleId: Role) {
+async function ensureDemoUser(firstName: string, lastName: string, email: string, plainPassword: string, roleId: Role) {
     const hashedPassword = cyber.hash(plainPassword);
     const existingUser = await UserModel.findOne({ email }).exec();
 
     if (!existingUser) {
-        const createdUser = await UserModel.create({ firstName, lastName: "User", email, password: hashedPassword, roleId });
+        const createdUser = await UserModel.create({ firstName, lastName, email, password: hashedPassword, roleId });
         console.log(`Created demo account: ${email} / ${plainPassword}`);
         return createdUser;
     }
 
+    existingUser.firstName = firstName;
+    existingUser.lastName = lastName;
     existingUser.password = hashedPassword;
     existingUser.roleId = roleId;
     await existingUser.save();
@@ -148,8 +150,9 @@ async function seed() {
     console.log("Connected to MongoDB for seeding.");
 
     // Demo accounts are always ensured, so the README credentials always work:
-    await ensureDemoUser("Admin", "admin@vacations.com", "admin1234", Role.Admin);
-    const user = await ensureDemoUser("Demo", "user@vacations.com", "user1234", Role.User);
+    await ensureDemoUser("Dana", "Levi", "admin@vacations.com", "admin1234", Role.Admin);
+    const user = await ensureDemoUser("Moshe", "Cohen", "user@vacations.com", "user1234", Role.User);
+    await ensureDemoUser("Noa", "Shapira", "noa@vacations.com", "noa1234", Role.User);
 
     // Vacations and likes are seeded only into an empty database,
     // so running the seed again never deletes existing data:

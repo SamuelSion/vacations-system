@@ -79,10 +79,20 @@
     border-bottom-right-radius: 14px;
 }
 
+.vacation-card-action {
+    display: flex !important;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    text-align: left;
+    border-radius: 16px !important;
+}
+
 .admin-actions {
     display: flex;
     gap: 10px;
-    margin-top: 12px;
+    padding: 4px 16px 10px;
 }
 
 .vacation-card-content {

@@ -2,8 +2,8 @@
 	"_id": {
 		"$oid": "6a9c540d048328d3618ff76d"
 	},
-	"firstName": "Admin",
-	"lastName": "User",
+	"firstName": "Dana",
+	"lastName": "Levi",
 	"email": "admin@vacations.com",
 	"password": "a4908c8a1fb020a4e5120f0c2af2de131812cb4be2999b0d10aeb34f2c49c81d65b2a96561e7de13e43a6d194c549de0c6ea4f02bc8c0ecb9d317dc7a74bf65b",
 	"roleId": 2
@@ -12,10 +12,19 @@
 	"_id": {
 		"$oid": "6a9c540d048328d3618ff770"
 	},
-	"firstName": "Demo",
-	"lastName": "User",
+	"firstName": "Moshe",
+	"lastName": "Cohen",
 	"email": "user@vacations.com",
 	"password": "78d3dd4f6954fdc470ce595bfac18e20c44c2013af29d33b5f610f5e64af3144e49cd1f2289d17f4de1fce0e712a6fb6fc35bb2b21de236597b82de054c3ef5f",
 	"roleId": 1
+},
+{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff7a0"
+	},
+	"firstName": "Noa",
+	"lastName": "Shapira",
+	"email": "noa@vacations.com",
+	"password": "ffc7ea534f822b1700646fb1656714b2e4ce5b0e00c7a12e4984b5e73930c6d2fcdc78d4437e5844b5c48c34ff85b08bc7b92e9ff4629edca27a30fdae83c526",
+	"roleId": 1
 }]
-

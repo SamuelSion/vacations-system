@@ -62,7 +62,7 @@ export function Header() {
 
                     {user && (
                         <>
-                            <span className="header-username">Hi, {user.firstName}</span>
+                            <span className="header-username">Hi, {user.firstName} {user.lastName}</span>
                             <Button color="primary" variant="outlined" size="small" onClick={signOut}>
                                 Sign Out
                             </Button>

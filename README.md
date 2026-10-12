@@ -12,12 +12,12 @@ https://github.com/SamuelSion/vacations-system
 
 ## Verified local status
 
-This project was verified locally with Docker Compose on 2026-10-12.
+Verified with Docker Compose on 2026-10-12:
 
-- MongoDB, the backend, and the frontend are running and healthy.
+- MongoDB, backend, and frontend containers are healthy.
 - The frontend loads vacation data and images from the backend.
-- User and admin login, likes, and the admin report endpoints work.
-- Both TypeScript projects pass their production builds.
+- User and admin login, and the admin likes report endpoint, work.
+- Backend and frontend TypeScript production builds pass.
 
 ## Running the project
 
@@ -38,7 +38,7 @@ depends on is `healthy` (MongoDB, then Backend, then Frontend). Check with `dock
 A one-off **seed** job runs on every `docker compose up`. It is safe to repeat:
 it fills the database with 14 real vacation destinations (with real photos) and a
 few demo likes only when the database has no vacations yet, so it never deletes
-existing data. It also makes sure the two demo accounts below exist and work.
+existing data. It also makes sure the three demo accounts below exist and work.
 
 > If the demo accounts ever return 401 (for example after `HASH_SALT` was changed),
 > run `docker compose run --rm seed` - it resets their passwords to the ones below.
@@ -48,10 +48,11 @@ Open the app at: **http://localhost:5173**
 
 ### Demo accounts
 
-| Role  | Email                  | Password    |
-|-------|------------------------|-------------|
-| Admin | admin@vacations.com    | admin1234   |
-| User  | user@vacations.com     | user1234    |
+| Role  | Name         | Email                  | Password    |
+|-------|--------------|------------------------|-------------|
+| Admin | Dana Levi    | admin@vacations.com    | admin1234   |
+| User  | Moshe Cohen  | user@vacations.com     | user1234    |
+| User  | Noa Shapira  | noa@vacations.com      | noa1234     |
 
 ### Environment variables
 
