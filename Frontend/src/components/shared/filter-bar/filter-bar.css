@@ -1,0 +1,23 @@
+.FilterBar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 24px !important;
+    padding: 14px 20px;
+    border: 1px solid rgba(227, 160, 8, 0.5);
+    border-radius: 22px;
+    background-color: rgba(255, 255, 255, 0.72);
+}
+
+.filter-button {
+    height: 44px;
+    border-radius: 999px !important;
+    border: 1px solid var(--color-turquoise-dark) !important;
+    color: var(--color-turquoise-dark) !important;
+}
+
+.filter-button.active {
+    background-color: var(--color-yellow) !important;
+    border-color: var(--color-yellow) !important;
+    color: #3a2a00 !important;
+}

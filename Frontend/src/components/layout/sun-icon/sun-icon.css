@@ -1,0 +1,9 @@
+.SunIcon .sun-core {
+    fill: var(--color-yellow);
+}
+
+.SunIcon .sun-rays path {
+    stroke: var(--color-gold);
+    stroke-width: 3;
+    stroke-linecap: round;
+}

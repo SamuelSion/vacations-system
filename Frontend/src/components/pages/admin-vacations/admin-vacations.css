@@ -1,0 +1,19 @@
+.admin-vacations-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.admin-vacations-title {
+    color: var(--color-turquoise-dark);
+    font-weight: 800;
+}
+
+.vacations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}

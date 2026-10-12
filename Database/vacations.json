@@ -1,0 +1,211 @@
+[{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff75d"
+	},
+	"destination": "Santorini, Greece",
+	"description": "Wander the whitewashed streets of Oia and watch the world-famous sunset melt over the caldera. Santorini vacation packages include boat trips to the volcanic islets, wine tastings at cliffside vineyards, and lazy afternoons on black-sand beaches.",
+	"startDate": {
+		"$date": "2026-09-25T00:00:00Z"
+	},
+	"endDate": {
+		"$date": "2026-10-05T00:00:00Z"
+	},
+	"price": 1780,
+	"imageName": "santorini-greece.jpg"
+},
+{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff75e"
+	},
+	"destination": "Paris, France",
+	"description": "Fall in love with the City of Light. Climb the Eiffel Tower at golden hour, stroll along the Seine, and spend your mornings in cozy cafes over croissants and coffee before an afternoon at the Louvre.",
+	"startDate": {
+		"$date": "2026-08-20T00:00:00Z"
+	},
+	"endDate": {
+		"$date": "2026-09-01T00:00:00Z"
+	},
+	"price": 1450,
+	"imageName": "paris-france.jpg"
+},
+{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff75f"
+	},
+	"destination": "Barcelona, Spain",
+	"description": "Soak up Gaudi's surreal architecture at the Sagrada Familia and Park Guell, then unwind on the golden sands of Barceloneta Beach. Evenings mean tapas, flamenco, and the lively buzz of Las Ramblas.",
+	"startDate": {
+		"$date": "2026-09-01T00:00:00Z"
+	},
+	"endDate": {
+		"$date": "2026-09-12T00:00:00Z"
+	},
+	"price": 1290,
+	"imageName": "barcelona-spain.jpg"
+},
+{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff760"
+	},
+	"destination": "Stonehenge, England",
+	"description": "Stand among the ancient standing stones of Stonehenge and imagine the world of the people who raised them thousands of years ago. Includes visits to nearby Bath, the Cotswolds, and traditional countryside pubs.",
+	"startDate": {
+		"$date": "2026-08-25T00:00:00Z"
+	},
+	"endDate": {
+		"$date": "2026-09-15T00:00:00Z"
+	},
+	"price": 990,
+	"imageName": "stonehenge-england.jpg"
+},
+{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff761"
+	},
+	"destination": "Reykjavik, Iceland",
+	"description": "Chase the northern lights across dramatic lava fields, soak in the geothermal waters of the Blue Lagoon, and explore glaciers and waterfalls on the Golden Circle route.",
+	"startDate": {
+		"$date": "2026-10-01T00:00:00Z"
+	},
+	"endDate": {
+		"$date": "2026-10-10T00:00:00Z"
+	},
+	"price": 1620,
+	"imageName": "reykjavik-iceland.jpg"
+},
+{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff762"
+	},
+	"destination": "Bora Bora, French Polynesia",
+	"description": "Sleep in an overwater bungalow above a lagoon of impossible turquoise, snorkel with reef sharks and stingrays, and watch the sun set behind Mount Otemanu from your private deck.",
+	"startDate": {
+		"$date": "2026-11-10T00:00:00Z"
+	},
+	"endDate": {
+		"$date": "2026-11-20T00:00:00Z"
+	},
+	"price": 4200,
+	"imageName": "bora-bora.jpg"
+},
+{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff763"
+	},
+	"destination": "Auckland, New Zealand",
+	"description": "Base yourself in Auckland and venture out to Milford Sound's towering fjords, hike volcanic craters, and enjoy world-class wine in Waiheke Island's vineyards.",
+	"startDate": {
+		"$date": "2026-12-05T00:00:00Z"
+	},
+	"endDate": {
+		"$date": "2026-12-15T00:00:00Z"
+	},
+	"price": 3150,
+	"imageName": "new-zealand.jpg"
+},
+{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff764"
+	},
+	"destination": "Sydney, Australia",
+	"description": "Take in the iconic Opera House and Harbour Bridge, surf at Bondi Beach, and take a day trip to the Blue Mountains. Sydney vacation packages include a sunset harbour cruise.",
+	"startDate": {
+		"$date": "2027-01-10T00:00:00Z"
+	},
+	"endDate": {
+		"$date": "2027-01-20T00:00:00Z"
+	},
+	"price": 2980,
+	"imageName": "australia.jpg"
+},
+{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff765"
+	},
+	"destination": "Kyoto, Japan",
+	"description": "Walk beneath thousands of vermillion torii gates at Fushimi Inari, visit serene bamboo groves, and experience a traditional tea ceremony in one of Japan's most beautiful historic cities.",
+	"startDate": {
+		"$date": "2026-10-15T00:00:00Z"
+	},
+	"endDate": {
+		"$date": "2026-10-25T00:00:00Z"
+	},
+	"price": 2340,
+	"imageName": "kyoto-japan.jpg"
+},
+{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff766"
+	},
+	"destination": "Machu Picchu, Peru",
+	"description": "Trek the Inca Trail through cloud forest and mountain passes to reach the lost city of Machu Picchu at sunrise - one of the most unforgettable views on Earth.",
+	"startDate": {
+		"$date": "2026-06-01T00:00:00Z"
+	},
+	"endDate": {
+		"$date": "2026-06-10T00:00:00Z"
+	},
+	"price": 2150,
+	"imageName": "machu-picchu-peru.jpg"
+},
+{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff767"
+	},
+	"destination": "Jaipur, India",
+	"description": "Explore the Pink City's magnificent forts and palaces, ride an elephant up to Amber Fort, and shop for vibrant textiles and jewelry in the bustling bazaars.",
+	"startDate": {
+		"$date": "2026-11-01T00:00:00Z"
+	},
+	"endDate": {
+		"$date": "2026-11-10T00:00:00Z"
+	},
+	"price": 1120,
+	"imageName": "india.jpg"
+},
+{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff768"
+	},
+	"destination": "Rio de Janeiro, Brazil",
+	"description": "Take the tram up to Christ the Redeemer for panoramic views, relax on Copacabana and Ipanema beaches, and hike Sugarloaf Mountain at sunset.",
+	"startDate": {
+		"$date": "2026-07-01T00:00:00Z"
+	},
+	"endDate": {
+		"$date": "2026-07-10T00:00:00Z"
+	},
+	"price": 1680,
+	"imageName": "rio-de-janeiro-brazil.jpg"
+},
+{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff769"
+	},
+	"destination": "Dubai, UAE",
+	"description": "Marvel at the Burj Khalifa, ride a dune buggy through the desert at sunset, and shop in the world's largest malls. Dubai vacation packages include a traditional dhow dinner cruise.",
+	"startDate": {
+		"$date": "2026-10-20T00:00:00Z"
+	},
+	"endDate": {
+		"$date": "2026-10-30T00:00:00Z"
+	},
+	"price": 1990,
+	"imageName": "dubai-uae.jpg"
+},
+{
+	"_id": {
+		"$oid": "6a9c540d048328d3618ff76a"
+	},
+	"destination": "Maldives",
+	"description": "Escape to a private overwater villa surrounded by coral reefs and crystal-clear water. Snorkel with manta rays, enjoy a candlelit dinner on the sand, and do absolutely nothing else.",
+	"startDate": {
+		"$date": "2026-12-20T00:00:00Z"
+	},
+	"endDate": {
+		"$date": "2026-12-30T00:00:00Z"
+	},
+	"price": 3800,
+	"imageName": "maldives.jpg"
+}]
+

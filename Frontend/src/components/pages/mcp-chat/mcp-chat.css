@@ -1,0 +1,46 @@
+.McpChat {
+    position: relative;
+    max-width: 700px;
+}
+
+.mcp-title {
+    text-align: center;
+    color: var(--color-turquoise-dark);
+    font-weight: 800;
+    margin-bottom: 8px !important;
+}
+
+.mcp-examples {
+    text-align: center;
+    color: #8a7d63;
+    margin-bottom: 20px !important;
+}
+
+.mcp-form-card {
+    padding: 24px !important;
+    border-radius: 20px !important;
+}
+
+.mcp-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.send-button {
+    align-self: flex-end;
+}
+
+.mcp-answer {
+    margin-top: 24px !important;
+    padding: 24px !important;
+    border-radius: 18px !important;
+    border-left: 6px solid var(--color-gold);
+    background-color: #ffffff;
+}
+
+.mcp-answer-text {
+    white-space: pre-wrap;
+    line-height: 1.7;
+    color: var(--color-text);
+}

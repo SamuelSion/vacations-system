@@ -1,0 +1,12 @@
+.vacations-title {
+    text-align: center;
+    color: var(--color-turquoise-dark);
+    font-weight: 800;
+    margin-bottom: 20px !important;
+}
+
+.vacations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}

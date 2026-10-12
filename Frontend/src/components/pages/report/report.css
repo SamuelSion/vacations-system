@@ -1,0 +1,20 @@
+.report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.report-title {
+    color: var(--color-turquoise-dark);
+    font-weight: 800;
+}
+
+.chart-container {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 14px rgba(227, 160, 8, 0.14);
+}

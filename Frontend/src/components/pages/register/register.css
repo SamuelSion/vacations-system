@@ -1,0 +1,40 @@
+.Register {
+    width: 100%;
+    max-width: 440px;
+    padding: 36px 36px 64px !important;
+    border-radius: 20px !important;
+}
+
+.form-title {
+    text-align: center;
+    color: var(--color-turquoise-dark);
+    font-weight: 800;
+    margin-bottom: 10px !important;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.submit-button {
+    margin-top: 20px !important;
+    padding: 10px !important;
+    font-weight: 700 !important;
+}
+
+.switch-link-text {
+    text-align: center;
+    margin-top: 16px !important;
+    color: #7a6f5c;
+}
+
+.switch-link {
+    color: var(--color-turquoise-dark);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.switch-link:hover {
+    text-decoration: underline;
+}
