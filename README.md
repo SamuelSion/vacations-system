@@ -14,11 +14,10 @@ https://github.com/SamuelSion/vacations-system
 
 This project was verified locally with Docker Compose on 2026-10-12.
 
-- MongoDB is running and healthy on port 27017.
-- Backend is healthy and responding at http://localhost:4000/ping with `pong`.
-- Frontend is healthy and serving the app at http://localhost:5173.
-- Demo admin login works with `admin@vacations.com / admin1234`.
-- Vacation data loads successfully from the backend.
+- MongoDB, the backend, and the frontend are running and healthy.
+- The frontend loads vacation data and images from the backend.
+- User and admin login, likes, and the admin report endpoints work.
+- Both TypeScript projects pass their production builds.
 
 ## Running the project
 

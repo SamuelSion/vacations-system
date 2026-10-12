@@ -16,8 +16,7 @@ export function AddVacation() {
     useAdmin();
     const navigate = useNavigate();
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm<IVacationFormData>();
-    const startDate = watch("startDate");
+    const { register, handleSubmit, getValues, formState: { errors } } = useForm<IVacationFormData>();
 
     async function send(formData: IVacationFormData) {
         try {
@@ -83,7 +82,10 @@ export function AddVacation() {
                         slotProps={{ inputLabel: { shrink: true } }}
                         {...register("endDate", {
                             required: "End date is required.",
-                            validate: value => !startDate || value >= startDate || "End date cannot be before start date."
+                            validate: value => {
+                                const startDate = getValues("startDate");
+                                return !startDate || value >= startDate || "End date cannot be before start date.";
+                            }
                         })}
                         error={!!errors.endDate}
                         helperText={errors.endDate?.message}

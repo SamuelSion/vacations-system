@@ -14,5 +14,5 @@ export function useIsUser(): void {
         if (!user) {
             navigate("/login");
         }
-    }, []);
+    }, [user, navigate]);
 }

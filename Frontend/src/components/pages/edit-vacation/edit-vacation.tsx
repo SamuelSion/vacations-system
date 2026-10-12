@@ -15,35 +15,26 @@ export function EditVacation() {
     const navigate = useNavigate();
     const { _id } = useParams<{ _id: string }>();
 
-    const { register, handleSubmit, watch, reset, formState: { errors } } = useForm<IVacationFormData>();
-    const startDate = watch("startDate");
+    const { register, handleSubmit, getValues, reset, formState: { errors } } = useForm<IVacationFormData>();
 
     const [loading, setLoading] = useState<boolean>(true);
     const [currentImageUrl, setCurrentImageUrl] = useState<string>("");
 
     useEffect(() => {
-        fetchVacation();
-    }, []);
-
-    async function fetchVacation() {
-        try {
-            const vacation = await vacationService.getOneVacation(_id!);
-            reset({
-                destination: vacation.destination,
-                description: vacation.description,
-                startDate: vacation.startDate.substring(0, 10),
-                endDate: vacation.endDate.substring(0, 10),
-                price: String(vacation.price)
-            });
-            setCurrentImageUrl(vacation.imageUrl);
-        }
-        catch (err: unknown) {
-            notify.error(err);
-        }
-        finally {
-            setLoading(false);
-        }
-    }
+        vacationService.getOneVacation(_id!)
+            .then(vacation => {
+                reset({
+                    destination: vacation.destination,
+                    description: vacation.description,
+                    startDate: vacation.startDate.substring(0, 10),
+                    endDate: vacation.endDate.substring(0, 10),
+                    price: String(vacation.price)
+                });
+                setCurrentImageUrl(vacation.imageUrl);
+            })
+            .catch((err: unknown) => notify.error(err))
+            .finally(() => setLoading(false));
+    }, [_id, reset]);
 
     async function send(formData: IVacationFormData) {
         try {
@@ -113,7 +104,10 @@ export function EditVacation() {
                         slotProps={{ inputLabel: { shrink: true } }}
                         {...register("endDate", {
                             required: "End date is required.",
-                            validate: value => !startDate || value >= startDate || "End date cannot be before start date."
+                            validate: value => {
+                                const startDate = getValues("startDate");
+                                return !startDate || value >= startDate || "End date cannot be before start date.";
+                            }
                         })}
                         error={!!errors.endDate}
                         helperText={errors.endDate?.message}

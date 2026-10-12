@@ -20,24 +20,21 @@ export function AdminVacations() {
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(true);
+    const [refreshKey, setRefreshKey] = useState<number>(0);
 
     useEffect(() => {
-        fetchVacations();
-    }, [page]);
+        vacationService.getVacations("all", page)
+            .then(result => {
+                setVacations(result.vacations);
+                setTotalPages(result.totalPages);
+            })
+            .catch((err: unknown) => notify.error(err))
+            .finally(() => setLoading(false));
+    }, [page, refreshKey]);
 
-    async function fetchVacations() {
-        try {
-            setLoading(true);
-            const result = await vacationService.getVacations("all", page);
-            setVacations(result.vacations);
-            setTotalPages(result.totalPages);
-        }
-        catch (err: unknown) {
-            notify.error(err);
-        }
-        finally {
-            setLoading(false);
-        }
+    function handlePageChange(newPage: number) {
+        setLoading(true);
+        setPage(newPage);
     }
 
     function goToEdit(vacation: IVacation) {
@@ -51,7 +48,8 @@ export function AdminVacations() {
         try {
             await vacationService.deleteVacation(vacation._id);
             notify.success("Vacation has been deleted.");
-            await fetchVacations();
+            setLoading(true);
+            setRefreshKey(previousKey => previousKey + 1);
         }
         catch (err: unknown) {
             notify.error(err);
@@ -96,7 +94,7 @@ export function AdminVacations() {
                 </div>
             )}
 
-            <PaginationBar currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+            <PaginationBar currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
         </main>
     );
 }

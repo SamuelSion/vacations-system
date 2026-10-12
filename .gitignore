@@ -5,6 +5,9 @@ dist/
 build/
 coverage/
 .vite/
+Backend/dist/
+Frontend/dist/
+*.tsbuildinfo
 
 # Local environment and secrets
 .env
@@ -17,10 +20,14 @@ coverage/
 # Logs and OS/editor state
 *.log
 npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
 .DS_Store
 Thumbs.db
 .vscode/*
 !.vscode/extensions.json
+.idea/
+desktop.ini
 
 # Local database/runtime data
 mongo-data/

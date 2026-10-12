@@ -16,22 +16,11 @@ export function Report() {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        fetchReport();
+        reportService.getLikesReport()
+            .then(data => setReport(data))
+            .catch((err: unknown) => notify.error(err))
+            .finally(() => setLoading(false));
     }, []);
-
-    async function fetchReport() {
-        try {
-            setLoading(true);
-            const data = await reportService.getLikesReport();
-            setReport(data);
-        }
-        catch (err: unknown) {
-            notify.error(err);
-        }
-        finally {
-            setLoading(false);
-        }
-    }
 
     async function downloadCsv() {
         try {

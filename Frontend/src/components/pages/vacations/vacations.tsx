@@ -20,29 +20,27 @@ export function Vacations() {
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(true);
+    const [refreshKey, setRefreshKey] = useState<number>(0);
 
     useEffect(() => {
-        fetchVacations();
-    }, [filter, page]);
-
-    async function fetchVacations() {
-        try {
-            setLoading(true);
-            const result = await vacationService.getVacations(filter, page);
-            setVacations(result.vacations);
-            setTotalPages(result.totalPages);
-        }
-        catch (err: unknown) {
-            notify.error(err);
-        }
-        finally {
-            setLoading(false);
-        }
-    }
+        vacationService.getVacations(filter, page)
+            .then(result => {
+                setVacations(result.vacations);
+                setTotalPages(result.totalPages);
+            })
+            .catch((err: unknown) => notify.error(err))
+            .finally(() => setLoading(false));
+    }, [filter, page, refreshKey]);
 
     function handleFilterChange(newFilter: VacationFilter) {
+        setLoading(true);
         setFilter(newFilter);
         setPage(1);
+    }
+
+    function handlePageChange(newPage: number) {
+        setLoading(true);
+        setPage(newPage);
     }
 
     async function toggleLike(vacation: IVacation) {
@@ -53,7 +51,8 @@ export function Vacations() {
             else {
                 await likeService.addLike(vacation._id);
             }
-            await fetchVacations();
+            setLoading(true);
+            setRefreshKey(previousKey => previousKey + 1);
         }
         catch (err: unknown) {
             notify.error(err);
@@ -89,7 +88,7 @@ export function Vacations() {
                 </div>
             )}
 
-            <PaginationBar currentPage={page} totalPages={totalPages} onPageChange={setPage} />
+            <PaginationBar currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
         </main>
     );
 }

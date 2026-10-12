@@ -20,5 +20,5 @@ export function useAdmin(): void {
             notify.error("You are not authorized to view this page.");
             navigate("/vacations");
         }
-    }, []);
+    }, [user, navigate]);
 }
