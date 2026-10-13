@@ -21,12 +21,12 @@ class McpTools {
     public async getAllVacationsTool(): Promise<CallToolResult> {
         console.log("Using tool: getAllVacationsTool");
         const vacations = await VacationModel.find().sort({ startDate: 1 }).exec();
-        const data = vacations.map(v => ({
-            destination: v.destination,
-            description: v.description,
-            startDate: v.startDate.toISOString().substring(0, 10),
-            endDate: v.endDate.toISOString().substring(0, 10),
-            price: v.price
+        const data = vacations.map(vacation => ({
+            destination: vacation.destination,
+            description: vacation.description,
+            startDate: vacation.startDate.toISOString().substring(0, 10),
+            endDate: vacation.endDate.toISOString().substring(0, 10),
+            price: vacation.price
         }));
         return toResult(data);
     }
@@ -41,11 +41,11 @@ class McpTools {
         else if (args.status === "past") query = { endDate: { $lt: now } };
 
         const vacations = await VacationModel.find(query).sort({ startDate: 1 }).exec();
-        const data = vacations.map(v => ({
-            destination: v.destination,
-            startDate: v.startDate.toISOString().substring(0, 10),
-            endDate: v.endDate.toISOString().substring(0, 10),
-            price: v.price
+        const data = vacations.map(vacation => ({
+            destination: vacation.destination,
+            startDate: vacation.startDate.toISOString().substring(0, 10),
+            endDate: vacation.endDate.toISOString().substring(0, 10),
+            price: vacation.price
         }));
         return toResult(data);
     }
@@ -68,7 +68,7 @@ class McpTools {
         console.log("Using tool: getAveragePriceTool");
         const vacations = await VacationModel.find().exec();
         const average = vacations.length
-            ? vacations.reduce((sum, v) => sum + v.price, 0) / vacations.length
+            ? vacations.reduce((sum, vacation) => sum + vacation.price, 0) / vacations.length
             : 0;
         return toResult({ averagePrice: Math.round(average * 100) / 100 });
     }
@@ -78,11 +78,11 @@ class McpTools {
         console.log("Using tool: getVacationsByCountryTool", args);
         const regex = new RegExp(args.country, "i");
         const vacations = await VacationModel.find({ destination: regex }).sort({ startDate: 1 }).exec();
-        const data = vacations.map(v => ({
-            destination: v.destination,
-            startDate: v.startDate.toISOString().substring(0, 10),
-            endDate: v.endDate.toISOString().substring(0, 10),
-            price: v.price
+        const data = vacations.map(vacation => ({
+            destination: vacation.destination,
+            startDate: vacation.startDate.toISOString().substring(0, 10),
+            endDate: vacation.endDate.toISOString().substring(0, 10),
+            price: vacation.price
         }));
         return toResult(data);
     }

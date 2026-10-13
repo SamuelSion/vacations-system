@@ -5,10 +5,10 @@
 	"destination": "Santorini, Greece",
 	"description": "Wander the whitewashed streets of Oia and watch the world-famous sunset melt over the caldera. Santorini vacation packages include boat trips to the volcanic islets, wine tastings at cliffside vineyards, and lazy afternoons on black-sand beaches.",
 	"startDate": {
-		"$date": "2026-09-25T00:00:00Z"
+		"$date": "2026-10-05T00:00:00Z"
 	},
 	"endDate": {
-		"$date": "2026-10-05T00:00:00Z"
+		"$date": "2026-10-31T00:00:00Z"
 	},
 	"price": 1780,
 	"imageName": "santorini-greece.jpg"
@@ -65,10 +65,10 @@
 	"destination": "Reykjavik, Iceland",
 	"description": "Chase the northern lights across dramatic lava fields, soak in the geothermal waters of the Blue Lagoon, and explore glaciers and waterfalls on the Golden Circle route.",
 	"startDate": {
-		"$date": "2026-10-01T00:00:00Z"
+		"$date": "2026-10-08T00:00:00Z"
 	},
 	"endDate": {
-		"$date": "2026-10-10T00:00:00Z"
+		"$date": "2026-11-08T00:00:00Z"
 	},
 	"price": 1620,
 	"imageName": "reykjavik-iceland.jpg"

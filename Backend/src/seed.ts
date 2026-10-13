@@ -13,8 +13,8 @@ const vacations = [
     {
         destination: "Santorini, Greece",
         description: "Wander the whitewashed streets of Oia and watch the world-famous sunset melt over the caldera. Santorini vacation packages include boat trips to the volcanic islets, wine tastings at cliffside vineyards, and lazy afternoons on black-sand beaches.",
-        startDate: new Date("2026-09-25"),
-        endDate: new Date("2026-10-05"),
+        startDate: new Date("2026-10-05"),
+        endDate: new Date("2026-10-31"),
         price: 1780,
         imageName: "santorini-greece.jpg"
     },
@@ -45,8 +45,8 @@ const vacations = [
     {
         destination: "Reykjavik, Iceland",
         description: "Chase the northern lights across dramatic lava fields, soak in the geothermal waters of the Blue Lagoon, and explore glaciers and waterfalls on the Golden Circle route.",
-        startDate: new Date("2026-10-01"),
-        endDate: new Date("2026-10-10"),
+        startDate: new Date("2026-10-08"),
+        endDate: new Date("2026-11-08"),
         price: 1620,
         imageName: "reykjavik-iceland.jpg"
     },
@@ -171,7 +171,7 @@ async function seed() {
     // Seed a handful of likes from the demo user so the report page isn't empty:
     const likedDestinations = ["Santorini, Greece", "Bora Bora, French Polynesia", "Kyoto, Japan", "Maldives"];
     for (const destination of likedDestinations) {
-        const vacation = dbVacations.find(v => v.destination === destination);
+        const vacation = dbVacations.find(item => item.destination === destination);
         if (vacation) {
             await LikeModel.create({ userId: user._id, vacationId: vacation._id });
         }

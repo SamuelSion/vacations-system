@@ -12,7 +12,7 @@ interface QuestionFormData {
     question: string;
 }
 
-const EXAMPLE_QUESTIONS = [
+const exampleQuestions = [
     "How many active vacations are there right now?",
     "What is the average vacation price?",
     "What future vacations exist for European countries?"
@@ -48,7 +48,7 @@ export function McpChat() {
             </Typography>
 
             <Typography variant="body2" className="mcp-examples">
-                Try asking: {EXAMPLE_QUESTIONS.join(" • ")}
+                Try asking: {exampleQuestions.join(" • ")}
             </Typography>
 
             <Paper className="mcp-form-card framed-card" elevation={3}>
