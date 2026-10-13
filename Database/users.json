@@ -4,8 +4,8 @@
 	},
 	"firstName": "Dana",
 	"lastName": "Levi",
-	"email": "admin@vacations.com",
-	"password": "a4908c8a1fb020a4e5120f0c2af2de131812cb4be2999b0d10aeb34f2c49c81d65b2a96561e7de13e43a6d194c549de0c6ea4f02bc8c0ecb9d317dc7a74bf65b",
+	"email": "dana@vacations.com",
+	"password": "7135e009f0777159361e17ebe10b37d9625b62a6f7ee1551427166e7fff8782ca0c878eccd6752c74312c66237b96fd734a7dd81ef357b26cbad1a6181eea5e5",
 	"roleId": 2
 },
 {
@@ -14,8 +14,8 @@
 	},
 	"firstName": "Moshe",
 	"lastName": "Cohen",
-	"email": "user@vacations.com",
-	"password": "78d3dd4f6954fdc470ce595bfac18e20c44c2013af29d33b5f610f5e64af3144e49cd1f2289d17f4de1fce0e712a6fb6fc35bb2b21de236597b82de054c3ef5f",
+	"email": "moshe@vacations.com",
+	"password": "687ebd88271618f3181cc25ea7a402647338bad2d54143cf705e46dc6a9ff10dbe68abbf749a0d95b0549ee584c2f20ab2213b4e7dec0bc8c511cb8fbc6eeebd",
 	"roleId": 1
 },
 {

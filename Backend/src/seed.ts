@@ -126,9 +126,10 @@ const vacations = [
 
 // Create a demo account, or repair it if it already exists with a password hash
 // that does not match the current HASH_SALT (e.g. HASH_SALT was changed later):
-async function ensureDemoUser(firstName: string, lastName: string, email: string, plainPassword: string, roleId: Role) {
+async function ensureDemoUser(firstName: string, lastName: string, email: string, plainPassword: string, roleId: Role, previousEmail?: string) {
     const hashedPassword = cyber.hash(plainPassword);
-    const existingUser = await UserModel.findOne({ email }).exec();
+    // A previous email lets an older database keep its user (and likes) while the email is renamed:
+    const existingUser = await UserModel.findOne({ email }).exec() || (previousEmail ? await UserModel.findOne({ email: previousEmail }).exec() : null);
 
     if (!existingUser) {
         const createdUser = await UserModel.create({ firstName, lastName, email, password: hashedPassword, roleId });
@@ -138,6 +139,7 @@ async function ensureDemoUser(firstName: string, lastName: string, email: string
 
     existingUser.firstName = firstName;
     existingUser.lastName = lastName;
+    existingUser.email = email;
     existingUser.password = hashedPassword;
     existingUser.roleId = roleId;
     await existingUser.save();
@@ -150,8 +152,8 @@ async function seed() {
     console.log("Connected to MongoDB for seeding.");
 
     // Demo accounts are always ensured, so the README credentials always work:
-    await ensureDemoUser("Dana", "Levi", "admin@vacations.com", "admin1234", Role.Admin);
-    const user = await ensureDemoUser("Moshe", "Cohen", "user@vacations.com", "user1234", Role.User);
+    await ensureDemoUser("Dana", "Levi", "dana@vacations.com", "dana1234", Role.Admin, "admin@vacations.com");
+    const user = await ensureDemoUser("Moshe", "Cohen", "moshe@vacations.com", "moshe1234", Role.User, "user@vacations.com");
     await ensureDemoUser("Noa", "Shapira", "noa@vacations.com", "noa1234", Role.User);
 
     // Vacations and likes are seeded only into an empty database,

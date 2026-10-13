@@ -35,8 +35,8 @@ Open the app at: **http://localhost:5173**
 
 | Role  | Name         | Email                  | Password    |
 |-------|--------------|------------------------|-------------|
-| Admin | Dana Levi    | admin@vacations.com    | admin1234   |
-| User  | Moshe Cohen  | user@vacations.com     | user1234    |
+| Admin | Dana Levi    | dana@vacations.com     | dana1234    |
+| User  | Moshe Cohen  | moshe@vacations.com    | moshe1234   |
 | User  | Noa Shapira  | noa@vacations.com      | noa1234     |
 
 

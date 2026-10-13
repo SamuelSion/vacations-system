@@ -65,7 +65,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"email\": \"user@vacations.com\",\n    \"password\": \"user1234\"\n}"
+                            "raw": "{\n    \"email\": \"moshe@vacations.com\",\n    \"password\": \"moshe1234\"\n}"
                         },
                         "url": {
                             "raw": "{{baseUrl}}/api/auth/login",
@@ -92,7 +92,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"email\": \"admin@vacations.com\",\n    \"password\": \"admin1234\"\n}"
+                            "raw": "{\n    \"email\": \"dana@vacations.com\",\n    \"password\": \"dana1234\"\n}"
                         },
                         "url": {
                             "raw": "{{baseUrl}}/api/auth/login",

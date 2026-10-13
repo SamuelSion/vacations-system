@@ -32,7 +32,7 @@ export function Header() {
                 <div className="header-brand">
                     <SunIcon />
                     <Typography variant="h5" component="div" className="header-title">
-                        Vacations
+                        Nodedim
                     </Typography>
                 </div>
 

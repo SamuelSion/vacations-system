@@ -51,7 +51,7 @@ export function Vacations() {
             else {
                 await likeService.addLike(vacation._id);
             }
-            setLoading(true);
+            // Refresh silently (no spinner) so the grid stays mounted and the scroll position is kept.
             setRefreshKey(previousKey => previousKey + 1);
         }
         catch (err: unknown) {
