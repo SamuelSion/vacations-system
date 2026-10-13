@@ -17,8 +17,9 @@ export class ClientError {
         try {
             await document.validate();
         }
-        catch (err: any) {
-            throw new ClientError(StatusCode.UnprocessableContent, err.message);
+        catch (err: unknown) {
+            const message = err instanceof Error ? err.message : "Validation failed.";
+            throw new ClientError(StatusCode.UnprocessableContent, message);
         }
     }
 

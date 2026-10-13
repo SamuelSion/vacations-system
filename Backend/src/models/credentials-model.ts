@@ -16,7 +16,7 @@ export class CredentialsModel implements ICredentialsModel {
     public email: string;
     public password: string;
 
-    public constructor(credentials: CredentialsModel) {
+    public constructor(credentials: ICredentialsModel) {
         this.email = credentials.email;
         this.password = credentials.password;
     }

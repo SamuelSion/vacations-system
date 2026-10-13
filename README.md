@@ -10,14 +10,6 @@ Context Protocol) server built into the backend.
 
 https://github.com/SamuelSion/vacations-system
 
-## Verified local status
-
-Verified with Docker Compose on 2026-10-12:
-
-- MongoDB, backend, and frontend containers are healthy.
-- The frontend loads vacation data and images from the backend.
-- User and admin login, and the admin likes report endpoint, work.
-- Backend and frontend TypeScript production builds pass.
 
 ## Running the project
 
@@ -32,13 +24,6 @@ This starts three services:
 - **backend** — Node.js/Express REST API (port 4000)
 - **frontend** — React app (port 5173)
 
-Every service has a healthcheck, and each one starts only after the service it
-depends on is `healthy` (MongoDB, then Backend, then Frontend). Check with `docker ps`.
-
-A one-off **seed** job runs on every `docker compose up`. It is safe to repeat:
-it fills the database with 14 real vacation destinations (with real photos) and a
-few demo likes only when the database has no vacations yet, so it never deletes
-existing data. It also makes sure the three demo accounts below exist and work.
 
 > If the demo accounts ever return 401 (for example after `HASH_SALT` was changed),
 > run `docker compose run --rm seed` - it resets their passwords to the ones below.
@@ -54,11 +39,14 @@ Open the app at: **http://localhost:5173**
 | User  | Moshe Cohen  | user@vacations.com     | user1234    |
 | User  | Noa Shapira  | noa@vacations.com      | noa1234     |
 
-### Environment variables
 
-Copy `.env.example` to `.env` at the project root and fill in:
-- `OPENAI_API_KEY` — required for the AI Recommendation page and the MCP chat page.
-- `JWT_SECRET` / `HASH_SALT` — change these to any random strings for a real deployment.
+### Automated tests
+
+- **Backend** (Mocha + Chai + Supertest): `npm test` inside `Backend/`. Needs MongoDB running and
+  a `.env` file. The tests create and delete their own users and vacations. With Docker running:
+  `docker compose exec backend npm test`.
+- **Frontend** (Vitest + Testing Library): `npm test` inside `Frontend/`. No server needed.
+
 
 ## Project structure
 

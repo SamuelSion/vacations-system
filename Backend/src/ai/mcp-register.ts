@@ -1,15 +1,11 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { mcpTools } from "./mcp-tools";
 import z from "zod";
+import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 
-// NOTE on the "as any" casts below: registerTool's generic inference over the
-// exact zod shape combined with this project's explicitly-typed tool handler
-// signatures caused the TypeScript compiler to report "Type instantiation is
-// excessively deep" (a known heavy-generic interaction between zod and this
-// SDK's registerTool overloads). The runtime behavior is unaffected - the
-// handler still receives exactly the shape declared in inputSchema. This is
-// the same "narrowly-scoped, documented cast over a generic union" pattern
-// used elsewhere in this project for the Mongoose "Document | Query" case.
+// registerTool's generic inference over the zod shapes fails with "Type instantiation is
+// excessively deep", so it is called through this narrowly-scoped, loosely-typed signature:
+type RegisterToolFunction = (name: string, config: object, handler: (args: never) => Promise<CallToolResult>) => unknown;
 
 class McpRegister {
 
@@ -27,7 +23,7 @@ class McpRegister {
             description: "Get vacations filtered by their date status: 'active' (happening right now), 'future' (not started yet) or 'past' (already ended).",
             inputSchema: { status: z.enum(["active", "future", "past"]) }
         };
-        (mcpServer.registerTool as any)(uniqueName, config, mcpTools.getVacationsByStatusTool);
+        (mcpServer.registerTool as unknown as RegisterToolFunction)(uniqueName, config, mcpTools.getVacationsByStatusTool);
     }
 
     public registerGetVacationCountTool(mcpServer: McpServer): void {
@@ -36,7 +32,7 @@ class McpRegister {
             description: "Get the count of vacations, optionally filtered by status: 'active', 'future' or 'past'. Omit status to count all vacations.",
             inputSchema: { status: z.enum(["active", "future", "past"]).optional() }
         };
-        (mcpServer.registerTool as any)(uniqueName, config, mcpTools.getVacationCountTool);
+        (mcpServer.registerTool as unknown as RegisterToolFunction)(uniqueName, config, mcpTools.getVacationCountTool);
     }
 
     public registerGetAveragePriceTool(mcpServer: McpServer): void {
@@ -53,7 +49,7 @@ class McpRegister {
             description: "Get vacations whose destination text mentions a given country or region (e.g. 'Greece', 'Europe' related countries by name).",
             inputSchema: { country: z.string() }
         };
-        (mcpServer.registerTool as any)(uniqueName, config, mcpTools.getVacationsByCountryTool);
+        (mcpServer.registerTool as unknown as RegisterToolFunction)(uniqueName, config, mcpTools.getVacationsByCountryTool);
     }
 
     public registerGetLikesForDestinationTool(mcpServer: McpServer): void {
@@ -62,7 +58,7 @@ class McpRegister {
             description: "Get the number of likes a specific vacation destination has received.",
             inputSchema: { destination: z.string() }
         };
-        (mcpServer.registerTool as any)(uniqueName, config, mcpTools.getLikesForDestinationTool);
+        (mcpServer.registerTool as unknown as RegisterToolFunction)(uniqueName, config, mcpTools.getLikesForDestinationTool);
     }
 
 }

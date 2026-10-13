@@ -43,7 +43,7 @@ class Cyber {
             jwt.verify(token, appConfig.jwtSecret);
             return true;
         }
-        catch (err: any) {
+        catch (err: unknown) {
             return false;
         }
     }
@@ -56,7 +56,7 @@ class Cyber {
             const payload = jwt.decode(token) as { user: { roleId: Role } };
             return payload.user.roleId === Role.Admin;
         }
-        catch (err: any) {
+        catch (err: unknown) {
             return false;
         }
     }
@@ -70,7 +70,7 @@ class Cyber {
             const payload = jwt.decode(token) as { user: { _id: string; roleId: Role } };
             return payload?.user;
         }
-        catch (err: any) {
+        catch (err: unknown) {
             return undefined;
         }
     }

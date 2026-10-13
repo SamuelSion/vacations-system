@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { FilterQuery, Types } from "mongoose";
 import { VacationModel, IVacationModel } from "../models/vacation-model";
 import { LikeModel } from "../models/like-model";
 import { ClientError } from "../models/client-error";
@@ -24,7 +24,7 @@ class VacationService {
     public async getVacations(filter: VacationFilter, page: number, userId?: string) {
 
         const now = new Date();
-        let query: any = {};
+        let query: FilterQuery<IVacationModel> = {};
 
         if (filter === "active") {
             query = { startDate: { $lte: now }, endDate: { $gte: now } };
@@ -92,7 +92,13 @@ class VacationService {
         vacation.imageName = imageName!;
         vacation.image = undefined;
 
-        await ClientError.validate(vacation);
+        try {
+            await ClientError.validate(vacation);
+        }
+        catch (err: unknown) {
+            await saver.delete(imageName!); // Do not leave an orphan image on disk.
+            throw err;
+        }
 
         const dbVacation = await vacation.save();
         return dbVacation;

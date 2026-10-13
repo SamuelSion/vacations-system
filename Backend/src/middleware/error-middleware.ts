@@ -3,6 +3,21 @@ import { StatusCode } from "../models/enums";
 import { ClientError } from "../models/client-error";
 import colors from "colors";
 
+// Reads the HTTP status from a ClientError or any error object that carries a numeric status:
+function getStatus(err: unknown): number {
+    if (err instanceof ClientError) return err.status;
+    if (typeof err === "object" && err !== null && "status" in err && typeof err.status === "number") return err.status;
+    return StatusCode.InternalServerError;
+}
+
+// Reads the message from a ClientError or an Error, with a generic fallback:
+function getMessage(err: unknown): string {
+    if (err instanceof ClientError || err instanceof Error) return err.message || "Something went wrong.";
+    return "Something went wrong.";
+}
+
+// Plain functions (not methods): Express calls the middleware without "this".
+
 class ErrorMiddleware {
 
     // Route Not Found Middleware:
@@ -17,9 +32,9 @@ class ErrorMiddleware {
     }
 
     // Catch-All Middleware:
-    public catchAll(err: any, request: Request, response: Response, next: NextFunction): void {
-        const status = err.status || StatusCode.InternalServerError;
-        const message = err.message || "Something went wrong.";
+    public catchAll(err: unknown, request: Request, response: Response, next: NextFunction): void {
+        const status = getStatus(err);
+        const message = getMessage(err);
         console.log(colors.red(message));
         response.status(status).json({ message });
     }

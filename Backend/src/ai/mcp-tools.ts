@@ -2,7 +2,8 @@
 // Each tool answers a specific, well-defined question about the vacations database.
 
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-import { VacationModel } from "../models/vacation-model";
+import { FilterQuery } from "mongoose";
+import { VacationModel, IVacationModel } from "../models/vacation-model";
 import { LikeModel } from "../models/like-model";
 
 function toResult(data: unknown): CallToolResult {
@@ -34,7 +35,7 @@ class McpTools {
     public async getVacationsByStatusTool(args: { status: "active" | "future" | "past" }): Promise<CallToolResult> {
         console.log("Using tool: getVacationsByStatusTool", args);
         const now = new Date();
-        let query: any = {};
+        let query: FilterQuery<IVacationModel> = {};
         if (args.status === "active") query = { startDate: { $lte: now }, endDate: { $gte: now } };
         else if (args.status === "future") query = { startDate: { $gt: now } };
         else if (args.status === "past") query = { endDate: { $lt: now } };
@@ -53,7 +54,7 @@ class McpTools {
     public async getVacationCountTool(args: { status?: "active" | "future" | "past" }): Promise<CallToolResult> {
         console.log("Using tool: getVacationCountTool", args);
         const now = new Date();
-        let query: any = {};
+        let query: FilterQuery<IVacationModel> = {};
         if (args.status === "active") query = { startDate: { $lte: now }, endDate: { $gte: now } };
         else if (args.status === "future") query = { startDate: { $gt: now } };
         else if (args.status === "past") query = { endDate: { $lt: now } };

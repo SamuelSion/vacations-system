@@ -1,12 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
-// Express 4 does not automatically forward a rejected Promise from an async
-// route handler to the error-handling middleware (next(err) -> catchAll).
-// Without this wrapper, a thrown ClientError inside an async controller
-// method becomes an "UnhandledPromiseRejection" that crashes the entire
-// server process, instead of reaching errorMiddleware.catchAll as intended.
-// This helper simply calls .catch(next) on every async handler so the
-// existing, already-taught next(err) pattern works reliably.
+// Express 4 does not forward rejected Promises from async handlers to the error middleware,
+// so this wrapper calls .catch(next) - otherwise the server process can crash.
 type AsyncRequestHandler = (request: Request, response: Response, next: NextFunction) => Promise<void>;
 
 export function asyncHandler(handler: AsyncRequestHandler) {

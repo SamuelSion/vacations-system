@@ -6,9 +6,8 @@ class VacationsMcpClient {
 
     private client: Client | null = null;
 
-    // Connects an MCP Client directly to our MCP Server, in the same process,
-    // using a pair of linked in-memory transports. No network / public URL
-    // is involved - the real MCP protocol still runs "under the hood".
+    // Connects an MCP Client to our MCP Server in the same process,
+    // using linked in-memory transports (no network involved).
     public async getClient(): Promise<Client> {
         if (this.client) return this.client;
 
