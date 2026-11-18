@@ -20,6 +20,7 @@ export function AiRecommendation() {
     const [recommendation, setRecommendation] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
 
+    // Ask the AI for a recommendation about the destination, and show a spinner until it answers:
     async function send(formData: DestinationFormData) {
         try {
             setLoading(true);

@@ -5,7 +5,6 @@ import supertest from "supertest";
 import { app, serverReady } from "../app";
 import { UserModel } from "../models/user-model";
 import { VacationModel, IVacationModel } from "../models/vacation-model";
-import { LikeModel } from "../models/like-model";
 import { Role, StatusCode } from "../models/enums";
 import { TestUser, testHelper } from "../utils/test-helper";
 
@@ -36,12 +35,11 @@ describe("LikeController", () => {
             startDate: new Date(testHelper.getDateFromToday(5)),
             endDate: new Date(testHelper.getDateFromToday(10)),
             price: 500,
-            imageName: "paris-france.jpg"
+            imageName: "21156309-9bef-532b-aabe-507a7f69bc93.jpg"
         }).save();
     });
 
     after(async () => {
-        await LikeModel.deleteMany({ vacationId: vacation._id }).exec();
         await VacationModel.deleteOne({ _id: vacation._id }).exec();
         await UserModel.deleteMany({ _id: { $in: [admin.user._id, regularUser.user._id] } }).exec();
     });
@@ -68,6 +66,16 @@ describe("LikeController", () => {
     it("should return 403 when an admin tries to like a vacation", async () => {
         const response = await supertest(app.server).post(`/api/likes/${vacation._id}`).auth(admin.token, { type: "bearer" });
         expect(response.status).to.be.equal(StatusCode.Forbidden);
+    });
+
+    it("should return 404 when liking a vacation that does not exist", async () => {
+        const response = await supertest(app.server).post("/api/likes/not-a-real-id").auth(regularUser.token, { type: "bearer" });
+        expect(response.status).to.be.equal(StatusCode.NotFound);
+    });
+
+    it("should keep the like inside the user document", async () => {
+        const dbUser = await UserModel.findById(regularUser.user._id).exec();
+        expect(dbUser!.likedVacations.map(id => id.toString())).to.include(vacation._id.toString());
     });
 
     it("should let a regular user unlike a vacation", async () => {

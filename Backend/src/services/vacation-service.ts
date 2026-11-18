@@ -1,6 +1,6 @@
 import { FilterQuery, Types } from "mongoose";
 import { VacationModel, IVacationModel } from "../models/vacation-model";
-import { LikeModel } from "../models/like-model";
+import { UserModel } from "../models/user-model";
 import { ClientError } from "../models/client-error";
 import { StatusCode } from "../models/enums";
 import { saver } from "../utils/image-saver";
@@ -9,16 +9,47 @@ export type VacationFilter = "all" | "liked" | "active" | "notStarted";
 
 class VacationService {
 
-    // Attach "likesCount" and "likedByMe" to a plain vacation object:
-    private async withLikeInfo(vacation: IVacationModel, userId?: string) {
-        const vacationObject = vacation.toJSON();
-        const likesCount = await LikeModel.countDocuments({ vacationId: vacation._id }).exec();
-        let likedByMe = false;
-        if (userId) {
-            const myLike = await LikeModel.findOne({ vacationId: vacation._id, userId }).exec();
-            likedByMe = !!myLike;
+    private readonly pageSize = 9;
+
+    // A malformed id can never exist in the database, so it is reported as "not found" (404)
+    // instead of letting Mongoose fail with a casting error (500):
+    private assertValidId(_id: string): void {
+        if (!Types.ObjectId.isValid(_id)) {
+            throw new ClientError(StatusCode.NotFound, `Vacation with _id ${_id} not found.`);
         }
-        return { ...vacationObject, likesCount, likedByMe };
+    }
+
+    // The likes are stored inside the users ("likedVacations" array), so the likes of a vacation are
+    // counted by one aggregation: open every user's array, keep only the requested vacations and group by vacation.
+    // Returns a map of: vacation id -> number of users who liked it.
+    private async getLikesCountMap(vacationIds: Types.ObjectId[]): Promise<Map<string, number>> {
+        const rows = await UserModel.aggregate<{ _id: Types.ObjectId; likes: number }>([
+            { $match: { likedVacations: { $in: vacationIds } } },
+            { $unwind: "$likedVacations" },
+            { $match: { likedVacations: { $in: vacationIds } } },
+            { $group: { _id: "$likedVacations", likes: { $sum: 1 } } }
+        ]).exec();
+        return new Map(rows.map(row => [row._id.toString(), row.likes]));
+    }
+
+    // The ids of the vacations the given user liked (empty for a guest):
+    private async getLikedVacationIds(userId?: string): Promise<Types.ObjectId[]> {
+        if (!userId) return [];
+        const user = await UserModel.findById(userId).exec();
+        return user?.likedVacations ?? [];
+    }
+
+    // Attach "likesCount" and "likedByMe" to every given vacation, using one query for all of them:
+    private async withLikeInfo(vacations: IVacationModel[], userId?: string) {
+        const vacationIds = vacations.map(vacation => vacation._id);
+        const likesCountMap = await this.getLikesCountMap(vacationIds);
+        const likedIds = (await this.getLikedVacationIds(userId)).map(id => id.toString());
+
+        return vacations.map(vacation => ({
+            ...vacation.toJSON(),
+            likesCount: likesCountMap.get(vacation._id.toString()) ?? 0,
+            likedByMe: likedIds.includes(vacation._id.toString())
+        }));
     }
 
     public async getVacations(filter: VacationFilter, page: number, userId?: string) {
@@ -27,99 +58,69 @@ class VacationService {
         let query: FilterQuery<IVacationModel> = {};
 
         if (filter === "active") {
+            // Already started and not yet finished:
             query = { startDate: { $lte: now }, endDate: { $gte: now } };
         }
         else if (filter === "notStarted") {
             query = { startDate: { $gt: now } };
         }
-
-        let vacationIds: Types.ObjectId[] | undefined;
-
-        if (filter === "liked") {
+        else if (filter === "liked") {
             if (!userId) throw new ClientError(StatusCode.Unauthorized, "You must be logged in to filter liked vacations.");
-            const myLikes = await LikeModel.find({ userId }).exec();
-            vacationIds = myLikes.map(like => like.vacationId);
-            query = { _id: { $in: vacationIds } };
+            query = { _id: { $in: await this.getLikedVacationIds(userId) } };
         }
 
-        const pageSize = 9;
-        const skip = (page - 1) * pageSize;
-
+        const skip = (page - 1) * this.pageSize;
         const totalCount = await VacationModel.countDocuments(query).exec();
 
+        // Vacations are always shown in ascending order of their start date:
         const vacations = await VacationModel
             .find(query)
             .sort({ startDate: 1 })
             .skip(skip)
-            .limit(pageSize)
+            .limit(this.pageSize)
             .exec();
 
-        const vacationsWithLikes = await Promise.all(
-            vacations.map(vacation => this.withLikeInfo(vacation, userId))
-        );
-
         return {
-            vacations: vacationsWithLikes,
+            vacations: await this.withLikeInfo(vacations, userId),
             totalCount,
-            totalPages: Math.ceil(totalCount / pageSize),
+            totalPages: Math.ceil(totalCount / this.pageSize),
             currentPage: page
         };
     }
 
     public async getOneVacation(_id: string, userId?: string) {
+        this.assertValidId(_id);
         const dbVacation = await VacationModel.findById(_id).exec();
         if (!dbVacation) {
             throw new ClientError(StatusCode.NotFound, `Vacation with _id ${_id} not found.`);
         }
-        return this.withLikeInfo(dbVacation, userId);
+        const [vacationWithLikes] = await this.withLikeInfo([dbVacation], userId);
+        return vacationWithLikes;
     }
 
     public async addVacation(vacation: IVacationModel): Promise<IVacationModel> {
 
-        if (!vacation.image) {
-            throw new ClientError(StatusCode.BadRequest, "Vacation image is required.");
-        }
+        // Business rules that live in the model: an image is required and the start date cannot be in the past:
+        vacation.validateBeforeAdd();
 
-        const startDate = new Date(vacation.startDate);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        // Validate before saving the image, so an invalid vacation never leaves an orphan image on disk.
+        // The image name does not exist yet - it is created (as a UUID) when the image is saved below:
+        await ClientError.validate(vacation, ["imageName"]);
 
-        if (startDate < today) {
-            throw new ClientError(StatusCode.UnprocessableContent, "Start date cannot be in the past.");
-        }
-
-        const imageName = await saver.save(vacation.image);
-        vacation.imageName = imageName!;
+        vacation.imageName = (await saver.save(vacation.image!))!;
         vacation.image = undefined;
 
-        try {
-            await ClientError.validate(vacation);
-        }
-        catch (err: unknown) {
-            await saver.delete(imageName!); // Do not leave an orphan image on disk.
-            throw err;
-        }
-
-        const dbVacation = await vacation.save();
-        return dbVacation;
+        return vacation.save();
     }
 
     public async updateVacation(vacation: IVacationModel): Promise<IVacationModel> {
 
+        // A malformed id cannot be cast to an ObjectId, so it is checked as plain text first:
+        this.assertValidId(String(vacation._id));
         const existingVacation = await VacationModel.findById(vacation._id).exec();
         if (!existingVacation) {
             throw new ClientError(StatusCode.NotFound, `Vacation with _id ${vacation._id} not found.`);
         }
-
-        // If a new image was uploaded, replace the old one on disk:
-        if (vacation.image) {
-            const newImageName = await saver.update(vacation.image, existingVacation.imageName);
-            vacation.imageName = newImageName!;
-        }
-        else {
-            vacation.imageName = existingVacation.imageName;
-        }
-        vacation.image = undefined;
 
         // Merge onto the existing document and validate manually - never pass
         // runValidators to findByIdAndUpdate, since the "endDate after startDate"
@@ -129,32 +130,38 @@ class VacationService {
         existingVacation.startDate = vacation.startDate;
         existingVacation.endDate = vacation.endDate;
         existingVacation.price = vacation.price;
-        existingVacation.imageName = vacation.imageName;
 
         await ClientError.validate(existingVacation);
 
-        const dbVacation = await existingVacation.save();
-        return dbVacation;
+        // Only after the data is valid: if a new image was uploaded, replace the old one on disk:
+        if (vacation.image) {
+            existingVacation.imageName = (await saver.update(vacation.image, existingVacation.imageName))!;
+        }
+
+        return existingVacation.save();
     }
 
     public async deleteVacation(_id: string): Promise<void> {
+        this.assertValidId(_id);
         const dbVacation = await VacationModel.findById(_id).exec();
         if (!dbVacation) {
             throw new ClientError(StatusCode.NotFound, `Vacation with _id ${_id} not found.`);
         }
         await saver.delete(dbVacation.imageName);
         await VacationModel.findByIdAndDelete(_id).exec();
-        await LikeModel.deleteMany({ vacationId: _id }).exec();
+
+        // Remove the deleted vacation from every user's liked vacations:
+        await UserModel.updateMany({ likedVacations: dbVacation._id }, { $pull: { likedVacations: dbVacation._id } }).exec();
     }
 
     // Used by the report page and the CSV export:
     public async getLikesReport(): Promise<{ destination: string; likes: number }[]> {
         const vacations = await VacationModel.find().exec();
-        const report = await Promise.all(vacations.map(async vacation => {
-            const likes = await LikeModel.countDocuments({ vacationId: vacation._id }).exec();
-            return { destination: vacation.destination, likes };
+        const likesCountMap = await this.getLikesCountMap(vacations.map(vacation => vacation._id));
+        return vacations.map(vacation => ({
+            destination: vacation.destination,
+            likes: likesCountMap.get(vacation._id.toString()) ?? 0
         }));
-        return report;
     }
 
 }

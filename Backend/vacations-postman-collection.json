@@ -311,7 +311,7 @@
                     "request": {
                         "method": "GET",
                         "url": {
-                            "raw": "{{baseUrl}}/api/vacations/images/santorini-greece.jpg",
+                            "raw": "{{baseUrl}}/api/vacations/images/dd7a0fa4-339a-56e6-ac20-4b745e1997d4.jpg",
                             "host": [
                                 "{{baseUrl}}"
                             ],
@@ -319,7 +319,7 @@
                                 "api",
                                 "vacations",
                                 "images",
-                                "santorini-greece.jpg"
+                                "dd7a0fa4-339a-56e6-ac20-4b745e1997d4.jpg"
                             ]
                         }
                     }

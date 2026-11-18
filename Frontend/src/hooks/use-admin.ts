@@ -12,6 +12,7 @@ export function useAdmin(): void {
     const user = useSelector<AppState, IUser>(state => state.user);
     const navigate = useNavigate();
 
+    // A guest goes to login, and a logged-in user who is not an admin goes back to the vacations page:
     useEffect(() => {
         if (!user) {
             navigate("/login");

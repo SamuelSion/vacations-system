@@ -13,6 +13,7 @@ import "./vacations.css";
 
 export function Vacations() {
 
+    // Only a regular user can see this page - guests go to login and admins to their own page:
     useIsUser();
 
     const [vacations, setVacations] = useState<IVacation[]>([]);
@@ -22,6 +23,8 @@ export function Vacations() {
     const [loading, setLoading] = useState<boolean>(true);
     const [refreshKey, setRefreshKey] = useState<number>(0);
 
+    // Load the current filter and page. A page that was already loaded comes from Redux, without asking the server.
+    // The refresh key changes after a like / unlike, to read the updated page again:
     useEffect(() => {
         vacationService.getVacations(filter, page)
             .then(result => {
@@ -32,6 +35,7 @@ export function Vacations() {
             .finally(() => setLoading(false));
     }, [filter, page, refreshKey]);
 
+    // A different filter always starts from its first page:
     function handleFilterChange(newFilter: VacationFilter) {
         setLoading(true);
         setFilter(newFilter);
@@ -43,6 +47,7 @@ export function Vacations() {
         setPage(newPage);
     }
 
+    // Like / unlike a vacation, according to its current state:
     async function toggleLike(vacation: IVacation) {
         try {
             if (vacation.likedByMe) {

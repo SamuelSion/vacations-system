@@ -4,18 +4,20 @@
 import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { FilterQuery } from "mongoose";
 import { VacationModel, IVacationModel } from "../models/vacation-model";
-import { LikeModel } from "../models/like-model";
-
-function toResult(data: unknown): CallToolResult {
-    return {
-        content: [{
-            type: "text",
-            text: JSON.stringify(data)
-        }]
-    };
-}
+import { UserModel } from "../models/user-model";
 
 class McpTools {
+
+    // Wraps any data as the text content of an MCP tool result.
+    // Static, because the tools are registered as plain functions and run without "this".
+    private static toResult(data: unknown): CallToolResult {
+        return {
+            content: [{
+                type: "text",
+                text: JSON.stringify(data)
+            }]
+        };
+    }
 
     // Returns every vacation with its full details (destination, dates, price):
     public async getAllVacationsTool(): Promise<CallToolResult> {
@@ -28,7 +30,7 @@ class McpTools {
             endDate: vacation.endDate.toISOString().substring(0, 10),
             price: vacation.price
         }));
-        return toResult(data);
+        return McpTools.toResult(data);
     }
 
     // Returns vacations filtered by their date status relative to today:
@@ -47,7 +49,7 @@ class McpTools {
             endDate: vacation.endDate.toISOString().substring(0, 10),
             price: vacation.price
         }));
-        return toResult(data);
+        return McpTools.toResult(data);
     }
 
     // Returns the count of vacations, optionally filtered by status:
@@ -60,7 +62,7 @@ class McpTools {
         else if (args.status === "past") query = { endDate: { $lt: now } };
 
         const count = await VacationModel.countDocuments(query).exec();
-        return toResult({ count });
+        return McpTools.toResult({ count });
     }
 
     // Returns the average price across all vacations:
@@ -70,7 +72,7 @@ class McpTools {
         const average = vacations.length
             ? vacations.reduce((sum, vacation) => sum + vacation.price, 0) / vacations.length
             : 0;
-        return toResult({ averagePrice: Math.round(average * 100) / 100 });
+        return McpTools.toResult({ averagePrice: Math.round(average * 100) / 100 });
     }
 
     // Returns vacations whose destination text contains a given country/region keyword:
@@ -84,7 +86,7 @@ class McpTools {
             endDate: vacation.endDate.toISOString().substring(0, 10),
             price: vacation.price
         }));
-        return toResult(data);
+        return McpTools.toResult(data);
     }
 
     // Returns the number of likes a specific destination has received:
@@ -92,9 +94,10 @@ class McpTools {
         console.log("Using tool: getLikesForDestinationTool", args);
         const regex = new RegExp(args.destination, "i");
         const vacation = await VacationModel.findOne({ destination: regex }).exec();
-        if (!vacation) return toResult({ error: "Destination not found." });
-        const likes = await LikeModel.countDocuments({ vacationId: vacation._id }).exec();
-        return toResult({ destination: vacation.destination, likes });
+        if (!vacation) return McpTools.toResult({ error: "Destination not found." });
+        // The likes are stored inside the users, so count the users who liked this vacation:
+        const likes = await UserModel.countDocuments({ likedVacations: vacation._id }).exec();
+        return McpTools.toResult({ destination: vacation.destination, likes });
     }
 
 }

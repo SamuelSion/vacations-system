@@ -22,6 +22,7 @@ export function AdminVacations() {
     const [loading, setLoading] = useState<boolean>(true);
     const [refreshKey, setRefreshKey] = useState<number>(0);
 
+    // Load the current page of vacations (a page that was already loaded comes from Redux, without asking the server):
     useEffect(() => {
         vacationService.getVacations("all", page)
             .then(result => {
@@ -41,6 +42,7 @@ export function AdminVacations() {
         navigate(`/admin/vacations/edit/${vacation._id}`);
     }
 
+    // Deleting is permanent, so the admin must confirm first:
     async function deleteVacation(vacation: IVacation) {
         const isSure = confirm(`Are you sure you want to delete "${vacation.destination}"?`);
         if (!isSure) return;
@@ -48,6 +50,7 @@ export function AdminVacations() {
         try {
             await vacationService.deleteVacation(vacation._id);
             notify.success("Vacation has been deleted.");
+            // The service cleared the loaded pages in Redux, so reloading brings the updated list:
             setLoading(true);
             setRefreshKey(previousKey => previousKey + 1);
         }

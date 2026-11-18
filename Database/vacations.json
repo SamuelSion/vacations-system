@@ -11,7 +11,7 @@
 		"$date": "2026-10-31T00:00:00Z"
 	},
 	"price": 1780,
-	"imageName": "santorini-greece.jpg"
+	"imageName": "dd7a0fa4-339a-56e6-ac20-4b745e1997d4.jpg"
 },
 {
 	"_id": {
@@ -26,7 +26,7 @@
 		"$date": "2026-09-01T00:00:00Z"
 	},
 	"price": 1450,
-	"imageName": "paris-france.jpg"
+	"imageName": "21156309-9bef-532b-aabe-507a7f69bc93.jpg"
 },
 {
 	"_id": {
@@ -41,7 +41,7 @@
 		"$date": "2026-09-12T00:00:00Z"
 	},
 	"price": 1290,
-	"imageName": "barcelona-spain.jpg"
+	"imageName": "15851f3e-f947-569a-b4c8-0f04736e576c.jpg"
 },
 {
 	"_id": {
@@ -56,7 +56,7 @@
 		"$date": "2026-09-15T00:00:00Z"
 	},
 	"price": 990,
-	"imageName": "stonehenge-england.jpg"
+	"imageName": "062e7d7c-66aa-56a0-8edc-a87a47a09dc5.jpg"
 },
 {
 	"_id": {
@@ -71,7 +71,7 @@
 		"$date": "2026-11-08T00:00:00Z"
 	},
 	"price": 1620,
-	"imageName": "reykjavik-iceland.jpg"
+	"imageName": "364e846a-1f62-564f-9713-b592ee0a5e5f.jpg"
 },
 {
 	"_id": {
@@ -86,7 +86,7 @@
 		"$date": "2026-11-20T00:00:00Z"
 	},
 	"price": 4200,
-	"imageName": "bora-bora.jpg"
+	"imageName": "c2505420-85b2-5a9f-a769-d5767363485b.jpg"
 },
 {
 	"_id": {
@@ -101,7 +101,7 @@
 		"$date": "2026-12-15T00:00:00Z"
 	},
 	"price": 3150,
-	"imageName": "new-zealand.jpg"
+	"imageName": "306a8302-1286-5ce8-9724-12e2d8b77beb.jpg"
 },
 {
 	"_id": {
@@ -116,7 +116,7 @@
 		"$date": "2027-01-20T00:00:00Z"
 	},
 	"price": 2980,
-	"imageName": "australia.jpg"
+	"imageName": "86843314-86e7-53a6-a7d2-fa491848652a.jpg"
 },
 {
 	"_id": {
@@ -131,7 +131,7 @@
 		"$date": "2026-10-25T00:00:00Z"
 	},
 	"price": 2340,
-	"imageName": "kyoto-japan.jpg"
+	"imageName": "a9e5e71d-3cfd-5bcf-94c4-32a42904577d.jpg"
 },
 {
 	"_id": {
@@ -146,7 +146,7 @@
 		"$date": "2026-06-10T00:00:00Z"
 	},
 	"price": 2150,
-	"imageName": "machu-picchu-peru.jpg"
+	"imageName": "961de0ba-e35d-55c9-9c73-41e095ee8046.jpg"
 },
 {
 	"_id": {
@@ -161,7 +161,7 @@
 		"$date": "2026-11-10T00:00:00Z"
 	},
 	"price": 1120,
-	"imageName": "india.jpg"
+	"imageName": "eeb92438-71d7-5b37-a887-49ba13b93b58.jpg"
 },
 {
 	"_id": {
@@ -176,7 +176,7 @@
 		"$date": "2026-07-10T00:00:00Z"
 	},
 	"price": 1680,
-	"imageName": "rio-de-janeiro-brazil.jpg"
+	"imageName": "21e5e0c2-ab38-5d3d-b28e-38b851d783b1.jpg"
 },
 {
 	"_id": {
@@ -191,7 +191,7 @@
 		"$date": "2026-10-30T00:00:00Z"
 	},
 	"price": 1990,
-	"imageName": "dubai-uae.jpg"
+	"imageName": "894c1db3-c87a-5f7d-b467-5a7942963b31.jpg"
 },
 {
 	"_id": {
@@ -206,6 +206,6 @@
 		"$date": "2026-12-30T00:00:00Z"
 	},
 	"price": 3800,
-	"imageName": "maldives.jpg"
+	"imageName": "e5994d68-a61c-5312-80b6-94ed4229cd7e.jpg"
 }]
 

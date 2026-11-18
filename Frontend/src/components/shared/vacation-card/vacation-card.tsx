@@ -17,6 +17,8 @@ interface VacationCardProps {
     onDelete?: (vacation: IVacation) => void;
 }
 
+// One vacation card. A regular user gets a like button, and an admin gets edit and delete buttons.
+// The card only reports what was clicked - the page that owns the data decides what to do:
 export function VacationCard(props: VacationCardProps) {
     const vacation = props.vacation;
     const [detailsOpen, setDetailsOpen] = useState<boolean>(false);

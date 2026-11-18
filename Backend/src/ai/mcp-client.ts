@@ -2,6 +2,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { vacationsMcpServer } from "./mcp-server";
 
+// The MCP client the AI agent uses to call the MCP server tools.
 class VacationsMcpClient {
 
     private client: Client | null = null;

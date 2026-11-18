@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+// The single place of the server configuration - everything comes from the .env file.
 class AppConfig {
 
     public readonly port = process.env.PORT || 4000;

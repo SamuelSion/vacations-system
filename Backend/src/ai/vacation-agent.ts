@@ -36,7 +36,7 @@ class VacationAgent {
             {
                 name: mcpTool.name,
                 description: mcpTool.description ?? mcpTool.name,
-                schema: z.record(z.string(), z.any())
+                schema: z.record(z.string(), z.unknown())
             }
         ));
     }

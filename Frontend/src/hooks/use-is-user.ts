@@ -11,6 +11,7 @@ export function useIsUser(): void {
     const user = useSelector<AppState, IUser>(state => state.user);
     const navigate = useNavigate();
 
+    // Runs when the user changes, so a logout or a login immediately redirects the page:
     useEffect(() => {
         if (!user) {
             navigate("/login");

@@ -12,6 +12,7 @@ interface QuestionFormData {
     question: string;
 }
 
+// Example questions the user can start with:
 const exampleQuestions = [
     "How many active vacations are there right now?",
     "What is the average vacation price?",
@@ -26,6 +27,7 @@ export function McpChat() {
     const [answer, setAnswer] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
 
+    // Send the question to the server, where the AI agent answers it using the MCP server tools:
     async function send(formData: QuestionFormData) {
         try {
             setLoading(true);

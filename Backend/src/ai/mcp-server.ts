@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { mcpRegister } from "./mcp-register";
 
+// The MCP server: exposes the vacations database to AI agents as a list of ready-to-use tools.
 class VacationsMcpServer {
 
     public create(): McpServer {

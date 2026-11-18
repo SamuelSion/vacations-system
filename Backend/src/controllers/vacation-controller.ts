@@ -8,26 +8,29 @@ import { saver } from "../utils/image-saver";
 import { asyncHandler } from "../utils/async-handler";
 import { UploadedFile } from "express-fileupload";
 
-// express-fileupload allows multiple files under the same field name (an array);
-// this form always sends a single image, so take the first one if that happens.
-function getSingleUploadedFile(files: UploadedFile | UploadedFile[] | undefined): UploadedFile | undefined {
-    if (!files) return undefined;
-    return Array.isArray(files) ? files[0] : files;
-}
-
+// Vacations CRUD. Reading is for any logged-in user, while add / update / delete are for admins only.
 class VacationController {
 
     public router: Router = express.Router();
 
     public constructor() {
-        this.router.get("/api/vacations", securityMiddleware.verifyLoggedIn, asyncHandler(this.getVacations));
+        this.router.get("/api/vacations", securityMiddleware.verifyLoggedIn, asyncHandler.wrap(this.getVacations));
         this.router.get("/api/vacations/images/:imageName", this.getImage);
-        this.router.get("/api/vacations/:_id", securityMiddleware.verifyLoggedIn, asyncHandler(this.getOneVacation));
-        this.router.post("/api/vacations", securityMiddleware.verifyAdmin, asyncHandler(this.addVacation));
-        this.router.put("/api/vacations/:_id", securityMiddleware.verifyAdmin, asyncHandler(this.updateVacation));
-        this.router.delete("/api/vacations/:_id", securityMiddleware.verifyAdmin, asyncHandler(this.deleteVacation));
+        this.router.get("/api/vacations/:_id", securityMiddleware.verifyLoggedIn, asyncHandler.wrap(this.getOneVacation));
+        this.router.post("/api/vacations", securityMiddleware.verifyAdmin, asyncHandler.wrap(this.addVacation));
+        this.router.put("/api/vacations/:_id", securityMiddleware.verifyAdmin, asyncHandler.wrap(this.updateVacation));
+        this.router.delete("/api/vacations/:_id", securityMiddleware.verifyAdmin, asyncHandler.wrap(this.deleteVacation));
     }
 
+    // express-fileupload allows multiple files under the same field name (an array);
+    // this form always sends a single image, so take the first one if that happens.
+    // Static, because Express calls the route handlers without "this".
+    private static getSingleUploadedFile(files: UploadedFile | UploadedFile[] | undefined): UploadedFile | undefined {
+        if (!files) return undefined;
+        return Array.isArray(files) ? files[0] : files;
+    }
+
+    // A page of vacations by filter. The user is read from the token to know which vacations he liked:
     private async getVacations(request: Request, response: Response): Promise<void> {
         const filter = (request.query.filter as VacationFilter) || "all";
         const page = Number(request.query.page) || 1;
@@ -42,9 +45,10 @@ class VacationController {
         response.json(vacation);
     }
 
+    // The vacation arrives as multipart/form-data, because it includes an image file:
     private async addVacation(request: Request, response: Response): Promise<void> {
         const vacation = new VacationModel(request.body);
-        vacation.image = getSingleUploadedFile(request.files?.image); // Mongoose ignores unknown keys passed to the constructor - assign directly.
+        vacation.image = VacationController.getSingleUploadedFile(request.files?.image); // Mongoose ignores unknown keys passed to the constructor - assign directly.
         const dbVacation = await vacationService.addVacation(vacation);
         response.status(StatusCode.Created).json(dbVacation);
     }
@@ -52,7 +56,7 @@ class VacationController {
     private async updateVacation(request: Request, response: Response): Promise<void> {
         request.body._id = request.params._id;
         const vacation = new VacationModel(request.body);
-        vacation.image = getSingleUploadedFile(request.files?.image); // Mongoose ignores unknown keys passed to the constructor - assign directly.
+        vacation.image = VacationController.getSingleUploadedFile(request.files?.image); // Mongoose ignores unknown keys passed to the constructor - assign directly.
         const dbVacation = await vacationService.updateVacation(vacation);
         response.status(StatusCode.OK).json(dbVacation);
     }
@@ -62,6 +66,7 @@ class VacationController {
         response.sendStatus(StatusCode.NoContent);
     }
 
+    // Streams an image file from the server disk (a "not found" picture is sent when the file does not exist):
     private getImage(request: Request, response: Response): void {
         const imageName = request.params.imageName.toString();
         const filePath = saver.getFilePath(imageName, true);

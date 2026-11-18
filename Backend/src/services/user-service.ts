@@ -6,6 +6,7 @@ import { cyber } from "../utils/cyber";
 
 class UserService {
 
+    // Emails are stored in lower case, so the search is case insensitive:
     private async isEmailTaken(email: string): Promise<boolean> {
         const existingUser = await UserModel.findOne({ email: email.toLowerCase() }).exec();
         return !!existingUser;
@@ -15,6 +16,9 @@ class UserService {
 
         // Never trust a role coming from the client - always force the lowest role:
         user.roleId = Role.User;
+
+        // Never trust liked vacations coming from the client - a new user starts with none:
+        user.likedVacations = [];
 
         if (await this.isEmailTaken(user.email)) {
             throw new ClientError(StatusCode.Conflict, "Email already taken.");
@@ -29,6 +33,7 @@ class UserService {
         return token;
     }
 
+    // The password is hashed with the same salt as on registration, and the hashes are compared in the database:
     public async login(credentials: CredentialsModel): Promise<string> {
         credentials.validate();
 

@@ -12,6 +12,7 @@ import { interceptor } from "./utils/interceptor";
 // Create the axios interceptor once, before the app renders:
 interceptor.create();
 
+// Redux gives the whole app access to the global state, the theme gives the MUI design, and the router handles the pages:
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <ThemeProvider theme={appTheme}>

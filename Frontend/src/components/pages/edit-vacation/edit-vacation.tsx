@@ -20,24 +20,35 @@ export function EditVacation() {
     const [loading, setLoading] = useState<boolean>(true);
     const [currentImageUrl, setCurrentImageUrl] = useState<string>("");
 
+    // Load the current vacation details, and fill the form with them so the admin edits the existing values:
     useEffect(() => {
         vacationService.getOneVacation(_id!)
             .then(vacation => {
                 reset({
                     destination: vacation.destination,
                     description: vacation.description,
+                    // A date input needs the YYYY-MM-DD part of the ISO date only:
                     startDate: vacation.startDate.substring(0, 10),
                     endDate: vacation.endDate.substring(0, 10),
                     price: String(vacation.price)
                 });
                 setCurrentImageUrl(vacation.imageUrl);
             })
-            .catch((err: unknown) => notify.error(err))
+            .catch((err: unknown) => {
+                // A vacation that does not exist is shown the 404 page (the "*" route), not an empty form:
+                if (vacationService.isNotFoundError(err)) {
+                    navigate("/vacation-not-found", { replace: true });
+                    return;
+                }
+                notify.error(err);
+            })
             .finally(() => setLoading(false));
-    }, [_id, reset]);
+    }, [_id, reset, navigate]);
 
+    // Runs only after all the fields passed the validation below:
     async function send(formData: IVacationFormData) {
         try {
+            // Changing the image is optional - without a selected file the old image stays:
             const fileList = formData.image as unknown as FileList;
             const image = fileList && fileList.length > 0 ? fileList[0] : null;
             const vacationToSend: IVacationFormData = { ...formData, image };

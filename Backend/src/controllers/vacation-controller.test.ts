@@ -1,4 +1,5 @@
 import "../utils/test-env";
+import fs from "fs";
 import path from "path";
 import { after, before, describe, it } from "mocha";
 import { expect } from "chai";
@@ -30,7 +31,7 @@ describe("VacationController", () => {
     let admin: TestUser;
     let regularUser: TestUser;
     let vacationId: string;
-    const imagePath = path.join(__dirname, "..", "assets", "images", "paris-france.jpg");
+    const imagePath = path.join(__dirname, "..", "assets", "images", "21156309-9bef-532b-aabe-507a7f69bc93.jpg");
 
     // Sends a multipart "add vacation" request as the given token:
     function postVacation(token: string, startDate: string, endDate: string) {
@@ -153,6 +154,23 @@ describe("VacationController", () => {
     it("should return 404 for a vacation that was deleted", async () => {
         const response = await supertest(app.server).get(`/api/vacations/${vacationId}`).auth(regularUser.token, { type: "bearer" });
         expect(response.status).to.be.equal(StatusCode.NotFound);
+    });
+
+    it("should return 404 for a malformed vacation id", async () => {
+        const response = await supertest(app.server).get("/api/vacations/not-a-real-id").auth(regularUser.token, { type: "bearer" });
+        expect(response.status).to.be.equal(StatusCode.NotFound);
+    });
+
+    it("should return 400 when asking the AI for a recommendation without a destination", async () => {
+        const response = await supertest(app.server).post("/api/ai/recommendation").auth(regularUser.token, { type: "bearer" }).send({ destination: " " });
+        expect(response.status).to.be.equal(StatusCode.BadRequest);
+    });
+
+    it("should not leave an image on disk when the vacation is invalid", async () => {
+        const imagesFolder = path.join(__dirname, "..", "assets", "images");
+        const filesBefore = fs.readdirSync(imagesFolder).length;
+        await postVacation(admin.token, testHelper.getDateFromToday(10), testHelper.getDateFromToday(5));
+        expect(fs.readdirSync(imagesFolder).length).to.be.equal(filesBefore);
     });
 
 });

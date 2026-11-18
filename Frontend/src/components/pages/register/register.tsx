@@ -11,6 +11,7 @@ export function Register() {
     const { register, handleSubmit, formState: { errors } } = useForm<IRegisterData>();
     const navigate = useNavigate();
 
+    // Runs only after the fields passed the validation below. A new user is logged in right after registering:
     async function send(user: IRegisterData) {
         try {
             await userService.register(user);

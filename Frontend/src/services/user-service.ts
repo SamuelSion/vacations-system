@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import { appConfig } from "../utils/app-config";
 import { IUser, IRegisterData, ICredentials } from "../models/user-model";
 import { userSlice } from "../redux/user-slice";
+import { vacationsSlice } from "../redux/vacations-slice";
 import { store } from "../redux/store";
 
 class UserService {
@@ -27,6 +28,9 @@ class UserService {
 
         localStorage.setItem("token", token);
 
+        // The loaded vacations belong to the previous user (their "likedByMe"), so forget them:
+        store.dispatch(vacationsSlice.actions.clearPages());
+
         const dbUser = jwtDecode<{ user: IUser }>(token).user;
         const action = userSlice.actions.initUser(dbUser);
         store.dispatch(action);
@@ -40,6 +44,9 @@ class UserService {
 
         localStorage.setItem("token", token);
 
+        // The loaded vacations belong to the previous user (their "likedByMe"), so forget them:
+        store.dispatch(vacationsSlice.actions.clearPages());
+
         const dbUser = jwtDecode<{ user: IUser }>(token).user;
         const action = userSlice.actions.initUser(dbUser);
         store.dispatch(action);
@@ -48,6 +55,7 @@ class UserService {
     // Logout current user:
     public logout(): void {
         localStorage.removeItem("token");
+        store.dispatch(vacationsSlice.actions.clearPages());
         const action = userSlice.actions.logoutUser();
         store.dispatch(action);
     }

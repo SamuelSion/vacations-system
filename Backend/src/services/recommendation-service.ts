@@ -2,6 +2,7 @@ import { appConfig } from "../utils/app-config";
 import OpenAI from "openai";
 import { ChatCompletionCreateParamsNonStreaming } from "openai/resources";
 
+// Asks OpenAI for a recommendation about a destination.
 class RecommendationService {
 
     private openai = new OpenAI({ apiKey: appConfig.openaiApiKey });

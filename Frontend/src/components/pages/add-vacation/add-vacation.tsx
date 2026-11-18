@@ -7,19 +7,23 @@ import { notify } from "../../../utils/notify";
 import { IVacationFormData } from "../../../models/vacation-model";
 import "./add-vacation.css";
 
+// Today as YYYY-MM-DD - the start date of a new vacation cannot be earlier than this:
 function todayAsIsoDate(): string {
     return new Date().toISOString().substring(0, 10);
 }
 
 export function AddVacation() {
 
+    // Only an admin can add vacations - anyone else is redirected away:
     useAdmin();
     const navigate = useNavigate();
 
     const { register, handleSubmit, getValues, formState: { errors } } = useForm<IVacationFormData>();
 
+    // Runs only after all the fields passed the validation below:
     async function send(formData: IVacationFormData) {
         try {
+            // The file input gives a FileList - only its first (and only) file is the vacation image:
             const image = (formData.image as unknown as FileList)[0];
             const vacationToSend: IVacationFormData = { ...formData, image };
             await vacationService.addVacation(vacationToSend);

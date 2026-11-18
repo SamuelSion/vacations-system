@@ -30,6 +30,7 @@ class Cyber {
             }
         };
 
+        // The token expires after 5 hours - then the user has to log in again:
         const options: SignOptions = { expiresIn: "5h" };
 
         const token = jwt.sign(payload, appConfig.jwtSecret, options);
@@ -66,13 +67,10 @@ class Cyber {
     public getUserFromRequestHeader(authorizationHeader: string | undefined): { _id: string; roleId: Role } | undefined {
         const token = authorizationHeader?.substring(7);
         if (!token) return undefined;
-        try {
-            const payload = jwt.decode(token) as { user: { _id: string; roleId: Role } };
-            return payload?.user;
-        }
-        catch (err: unknown) {
-            return undefined;
-        }
+
+        // jwt.decode does not throw - it returns null for a malformed token:
+        const payload = jwt.decode(token) as { user: { _id: string; roleId: Role } } | null;
+        return payload?.user;
     }
 
 }

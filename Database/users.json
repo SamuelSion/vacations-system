@@ -6,7 +6,8 @@
 	"lastName": "Levi",
 	"email": "dana@vacations.com",
 	"password": "7135e009f0777159361e17ebe10b37d9625b62a6f7ee1551427166e7fff8782ca0c878eccd6752c74312c66237b96fd734a7dd81ef357b26cbad1a6181eea5e5",
-	"roleId": 2
+	"roleId": 2,
+	"likedVacations": []
 },
 {
 	"_id": {
@@ -16,7 +17,21 @@
 	"lastName": "Cohen",
 	"email": "moshe@vacations.com",
 	"password": "687ebd88271618f3181cc25ea7a402647338bad2d54143cf705e46dc6a9ff10dbe68abbf749a0d95b0549ee584c2f20ab2213b4e7dec0bc8c511cb8fbc6eeebd",
-	"roleId": 1
+	"roleId": 1,
+	"likedVacations": [
+		{
+			"$oid": "6a9c540d048328d3618ff75d"
+		},
+		{
+			"$oid": "6a9c540d048328d3618ff762"
+		},
+		{
+			"$oid": "6a9c540d048328d3618ff765"
+		},
+		{
+			"$oid": "6a9c540d048328d3618ff76a"
+		}
+	]
 },
 {
 	"_id": {
@@ -26,5 +41,6 @@
 	"lastName": "Shapira",
 	"email": "noa@vacations.com",
 	"password": "ffc7ea534f822b1700646fb1656714b2e4ce5b0e00c7a12e4984b5e73930c6d2fcdc78d4437e5844b5c48c34ff85b08bc7b92e9ff4629edca27a30fdae83c526",
-	"roleId": 1
+	"roleId": 1,
+	"likedVacations": []
 }]

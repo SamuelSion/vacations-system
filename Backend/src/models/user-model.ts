@@ -9,6 +9,7 @@ export interface IUserModel extends Document {
     email: string;
     password: string;
     roleId: Role;
+    likedVacations: Types.ObjectId[]; // The vacations this user liked - stored inside the user document.
 }
 
 // 2. Schema:
@@ -47,6 +48,11 @@ export const UserSchema = new Schema<IUserModel>({
         required: true,
         enum: [Role.User, Role.Admin],
         default: Role.User
+    },
+    likedVacations: {
+        type: [Schema.Types.ObjectId],
+        ref: "VacationModel",
+        default: []
     }
 }, {
     versionKey: false,

@@ -11,6 +11,7 @@ export function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm<ICredentials>();
     const navigate = useNavigate();
 
+    // Runs only after the fields passed the validation below. On success the token is saved by the service:
     async function send(credentials: ICredentials) {
         try {
             await userService.login(credentials);

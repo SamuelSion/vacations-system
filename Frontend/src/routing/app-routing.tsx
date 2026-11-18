@@ -28,6 +28,7 @@ export function AppRouting() {
                 <Route path="/admin/vacations/add" element={<AddVacation />} />
                 <Route path="/admin/vacations/edit/:_id" element={<EditVacation />} />
                 <Route path="/admin/report" element={<Report />} />
+                {/* Any other address - including a vacation that does not exist - shows the 404 page: */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </Suspense>

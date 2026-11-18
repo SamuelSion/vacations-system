@@ -10,11 +10,13 @@ import "./report.css";
 
 export function Report() {
 
+    // Only an admin can see the report:
     useAdmin();
 
     const [report, setReport] = useState<ILikesReportRow[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
+    // Load the number of likes of every vacation destination for the chart:
     useEffect(() => {
         reportService.getLikesReport()
             .then(data => setReport(data))
@@ -22,6 +24,7 @@ export function Report() {
             .finally(() => setLoading(false));
     }, []);
 
+    // The server builds the CSV file, the service downloads it directly to the computer:
     async function downloadCsv() {
         try {
             await reportService.downloadLikesCsv();

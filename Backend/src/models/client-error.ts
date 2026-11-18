@@ -13,9 +13,10 @@ export class ClientError {
 
     // Runs mongoose schema validation on a document and converts
     // a validation failure into a ClientError with 422 status.
-    public static async validate(document: Document): Promise<void> {
+    // Optionally skips fields that do not have a value yet (e.g. a file name that is created after validation).
+    public static async validate(document: Document, pathsToSkip: string[] = []): Promise<void> {
         try {
-            await document.validate();
+            await document.validate({ pathsToSkip });
         }
         catch (err: unknown) {
             const message = err instanceof Error ? err.message : "Validation failed.";

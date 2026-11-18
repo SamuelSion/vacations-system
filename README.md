@@ -51,7 +51,7 @@ Open the app at: **http://localhost:5173**
 ## Project structure
 
 ```
-Database/     MongoDB export (for submission)
+Database/     MongoDB export (for submission): vacations.json, users.json (likes are inside the users)
 Backend/      Node.js + Express + TypeScript REST API, MCP server, seed script
 Frontend/     React + TypeScript + MUI client
 ```
@@ -67,4 +67,9 @@ Frontend/     React + TypeScript + MUI client
   (via `InMemoryTransport`) - to answer free-text questions, keeping the OpenAI
   API key on the server and requiring no public tunnel.
 - **Images:** Uploaded vacation images are stored on disk in the backend
-  (`src/assets/images`); only the file name is stored in MongoDB.
+  (`src/assets/images`) under UUID file names (the seed images too); only the file name is stored in MongoDB.
+- **Likes:** Stored inside each user document, as a `likedVacations` array of vacation ids
+  (there is no separate Likes collection). A vacation's likes are the users whose array contains it.
+- **Redux:** Besides the logged-in user, Redux keeps the vacation pages that were already loaded
+  (per filter and page number), so going back to a page does not ask the server again.
+  The pages are cleared after add / update / delete and when another user logs in.

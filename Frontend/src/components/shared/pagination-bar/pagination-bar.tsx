@@ -8,6 +8,7 @@ interface PaginationBarProps {
 }
 
 export function PaginationBar(props: PaginationBarProps) {
+    // A single page needs no page buttons:
     if (props.totalPages <= 1) return null;
 
     return (

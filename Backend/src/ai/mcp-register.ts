@@ -7,6 +7,8 @@ import { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 // excessively deep", so it is called through this narrowly-scoped, loosely-typed signature:
 type RegisterToolFunction = (name: string, config: object, handler: (args: never) => Promise<CallToolResult>) => unknown;
 
+// Registers every tool in the MCP server with a unique name, a description (the AI reads it to decide
+// when to use the tool) and an input schema.
 class McpRegister {
 
     public registerGetAllVacationsTool(mcpServer: McpServer): void {

@@ -1,5 +1,7 @@
 import { Document, model, Schema, Types } from "mongoose";
 import { UploadedFile } from "express-fileupload";
+import { ClientError } from "./client-error";
+import { StatusCode } from "./enums";
 
 // 1. Interface:
 export interface IVacationModel extends Document {
@@ -11,6 +13,7 @@ export interface IVacationModel extends Document {
     price: number;
     imageName: string;
     image?: UploadedFile; // Virtual field - only used during add/update, never saved to DB.
+    validateBeforeAdd(): void;
 }
 
 // 2. Schema:
@@ -66,6 +69,22 @@ export const VacationSchema = new Schema<IVacationModel>({
 // Virtual field - not stored in DB, computed from imageName on every response:
 VacationSchema.virtual("imageUrl").get(function (this: IVacationModel) {
     return process.env.VACATION_IMAGES_BASE_URL + this.imageName;
+});
+
+// Business rules that apply only when a new vacation is added (not when an existing one is updated):
+// an image is required, and the start date cannot be in the past.
+VacationSchema.method("validateBeforeAdd", function (this: IVacationModel): void {
+
+    if (!this.image) {
+        throw new ClientError(StatusCode.BadRequest, "Vacation image is required.");
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (new Date(this.startDate) < today) {
+        throw new ClientError(StatusCode.UnprocessableContent, "Start date cannot be in the past.");
+    }
 });
 
 // 3. Model:

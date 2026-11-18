@@ -1,5 +1,6 @@
-import { LikeModel } from "../models/like-model";
+import { Types } from "mongoose";
 import { UserModel } from "../models/user-model";
+import { VacationModel } from "../models/vacation-model";
 import { ClientError } from "../models/client-error";
 import { StatusCode, Role } from "../models/enums";
 
@@ -12,21 +13,25 @@ class LikeService {
         }
     }
 
+    // A malformed id or an id of a vacation that does not exist cannot be liked:
+    private async assertVacationExists(vacationId: string): Promise<void> {
+        const exists = Types.ObjectId.isValid(vacationId) && await VacationModel.exists({ _id: vacationId }).exec();
+        if (!exists) {
+            throw new ClientError(StatusCode.NotFound, `Vacation with _id ${vacationId} not found.`);
+        }
+    }
+
     public async addLike(userId: string, vacationId: string): Promise<void> {
         await this.assertNotAdmin(userId);
+        await this.assertVacationExists(vacationId);
 
-        const existingLike = await LikeModel.findOne({ userId, vacationId }).exec();
-        if (existingLike) {
-            return; // Already liked - nothing to do.
-        }
-
-        const like = new LikeModel({ userId, vacationId });
-        await ClientError.validate(like);
-        await like.save();
+        // $addToSet adds the id only if it is not already in the array - a user can like a vacation only once:
+        await UserModel.updateOne({ _id: userId }, { $addToSet: { likedVacations: vacationId } }).exec();
     }
 
     public async removeLike(userId: string, vacationId: string): Promise<void> {
-        await LikeModel.findOneAndDelete({ userId, vacationId }).exec();
+        await this.assertVacationExists(vacationId);
+        await UserModel.updateOne({ _id: userId }, { $pull: { likedVacations: vacationId } }).exec();
     }
 
 }
